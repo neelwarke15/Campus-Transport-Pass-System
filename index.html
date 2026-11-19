@@ -1,0 +1,562 @@
+<html>
+  <head>
+    <title>Campus Transport Pass System</title>
+<style>
+  
+   body {
+    font-family: Arial, Helvetica, sans-serif;
+    background-color: #eef4fb;
+    margin: 0;
+    padding: 0;
+    color: #222;
+     
+  }
+  
+  
+  .header {
+    background-color: #2c6fbb;
+    color: white;
+    padding: 20px;
+    text-align: center;
+  }
+  .header h1 {
+    margin: 0;
+    font-size: 26px;
+  }
+  .header p {
+    margin: 5px 0 0 0;
+    font-size: 14px;
+  }
+ 
+  
+  .info-box {
+    background-color: #ffffff;
+    border: 2px solid #2c6fbb;
+    border-radius: 8px;
+    margin: 20px auto;
+    padding: 15px 20px;
+    max-width: 700px;
+  }
+  .info-box h2 {
+    margin-top: 0;
+    color: #2c6fbb;
+  }
+ 
+  
+  .menu {
+    text-align: center;
+    background-color: #ffffff;
+    padding: 10px;
+    border-bottom: 3px solid #2c6fbb;
+  }
+  .menu button {
+    background-color: #eef4fb;
+    border: 2px solid #2c6fbb;
+    color: #2c6fbb;
+    padding: 8px 16px;
+    margin: 4px;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 14px;
+    font-weight: bold;
+  }
+  .menu button:hover {
+    background-color: #d7e8fb;
+  }
+  .menu button.active {
+    background-color: #2c6fbb;
+    color: white;
+  }
+ 
+  
+  .section {
+    display: none;
+    max-width: 700px;
+    margin: 20px auto;
+    background: #ffffff;
+    padding: 20px;
+    border: 1px solid #ccc;
+    border-radius: 8px;
+  }
+  .section.active {
+    display: block;
+  }
+  .section h2 {
+    color: #2c6fbb;
+    margin-top: 0;
+  }
+ 
+  
+  label {
+    display: block;
+    margin-top: 12px;
+    font-weight: bold;
+    font-size: 14px;
+  }
+  input, select {
+    width: 100%;
+    padding: 8px;
+    margin-top: 4px;
+    border: 1px solid #aaa;
+    border-radius: 4px;
+    font-size: 14px;
+    box-sizing: border-box;
+  }
+  button.action {
+    background-color: #2c6fbb;
+    color: white;
+    border: none;
+    padding: 10px 18px;
+    margin-top: 15px;
+    border-radius: 5px;
+    font-size: 14px;
+    cursor: pointer;
+  }
+  button.action:hover {
+    background-color: #1e5590;
+  }
+  button.small-btn {
+    padding: 5px 10px;
+    font-size: 12px;
+    margin-right: 5px;
+  }
+  .reject-btn {
+    background-color: #cc4444;
+  }
+  .reject-btn:hover {
+    background-color: #a53333;
+  }
+ 
+  
+  .msg {
+    padding: 10px;
+    border-radius: 5px;
+    margin-top: 10px;
+    display: none;
+    font-size: 14px;
+  }
+  .msg.show { display: block; }
+  .msg.good { background-color: #d9f2d9; color: #256029; border: 1px solid #9ed69e; }
+  .msg.bad { background-color: #fbdada; color: #8a1f1f; border: 1px solid #f0a8a8; }
+ 
+  
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 10px;
+    font-size: 13px;
+  }
+  th, td {
+    border: 1px solid #ccc;
+    padding: 8px;
+    text-align: left;
+  }
+  th {
+    background-color: #2c6fbb;
+    color: white;
+  }
+ 
+
+  .tag {
+    padding: 3px 8px;
+    border-radius: 12px;
+    font-size: 12px;
+    font-weight: bold;
+  }
+
+  .tag.pending { background-color: #fff3cd; color: #806000; }
+  .tag.approved { background-color: #d9f2d9; color: #256029; }
+  .tag.rejected { background-color: #fbdada; color: #8a1f1f; }
+  .tag.expired { background-color: #e2e2e2; color: #555; }
+ 
+
+  .pass-card {
+    border: 3px dashed #2c6fbb;
+    border-radius: 10px;
+    padding: 20px;
+    background-color: #f5f9ff;
+    text-align: center;
+  }
+
+  .pass-card h3 {
+    margin: 5px 0;
+    color: #2c6fbb;
+  }
+  
+  .pass-id {
+    font-size: 20px;
+    font-weight: bold;
+    letter-spacing: 2px;
+    margin: 10px 0;
+    background: white;
+    display: inline-block;
+    padding: 8px 14px;
+    border: 2px solid #2c6fbb;
+    border-radius: 6px;
+  }
+
+  .fake-qr {
+    width: 100px;
+    height: 100px;
+    margin: 10px auto;
+    background-image:
+      linear-gradient(90deg, #222 50%, transparent 50%),
+      linear-gradient(#222 50%, transparent 50%);
+    background-size: 12px 12px;
+    border: 4px solid #222;
+  }
+ 
+  footer {
+    text-align: center;
+    padding: 15px;
+    font-size: 12px;
+    color: #777;
+  }
+</style>
+</head>
+<body>
+ 
+
+  <div class="header">
+    <h1>🚌 Campus Transport Pass System</h1>
+    <p>Mini Project by Team GenZ Trio</p>
+  </div>
+ 
+
+  <div class="menu">
+    <button class="tab-btn active" onclick="showSection('home')">Home</button>
+    <button class="tab-btn" onclick="showSection('profile')">My Profile</button>
+    <button class="tab-btn" onclick="showSection('request')">Request Pass</button>
+    <button class="tab-btn" onclick="showSection('mypass')">My Pass</button>
+    <button class="tab-btn" onclick="showSection('admin')">Admin Panel</button>
+    <button class="tab-btn" onclick="showSection('validate')">Validate Pass</button>
+  </div>
+ 
+ 
+  <div id="home" class="section active">
+    <h2>About This Project</h2>
+    <div class="info-box" style="margin:0;">
+      <p><b>Problem:</b> Students and staff have to request and renew bus passes manually on paper.</p>
+      <p><b>Our Solution:</b> A simple online system where a student fills a form, admin approves it,
+      and a pass is generated with an expiry date and a pass number.</p>
+      <p><b>Steps in this project:</b></p>
+      <ol>
+        <li>Student creates a profile</li>
+        <li>Student selects a bus route</li>
+        <li>Student requests a pass</li>
+        <li>Admin approves or rejects the request</li>
+        <li>If approved, a pass number and expiry date is generated</li>
+        <li>Anyone can validate a pass number on the Validate page</li>
+      </ol>
+    </div>
+  </div>
+ 
+
+  <div id="profile" class="section">
+    <h2>My Profile</h2>
+    <label>Full Name</label>
+    <input type="text" id="studentName" placeholder="Enter your name">
+ 
+    <label>Roll Number</label>
+    <input type="text" id="studentRoll" placeholder="Enter your roll number">
+ 
+    <label>Email</label>
+    <input type="text" id="studentEmail" placeholder="Enter your email">
+ 
+    <label>Route</label>
+    <select id="studentRoute">
+      <option value="Route 1">Route 1 - North Gate to Campus (Rs. 500)</option>
+      <option value="Route 2">Route 2 - Hostel to Academic Block (Rs. 350)</option>
+      <option value="Route 3">Route 3 - Railway Station to Campus (Rs. 800)</option>
+    </select>
+ 
+    <button class="action" onclick="saveProfile()">Save Profile</button>
+    <div id="profileMsg" class="msg good">Profile saved successfully!</div>
+  </div>
+ 
+  <div id="request" class="section">
+    <h2>Request a Bus Pass</h2>
+    <div id="noProfileMsg" class="msg bad">Please fill your profile first (go to My Profile tab).</div>
+ 
+    <div id="requestForm" style="display:none;">
+      <p>Name: <b id="showName"></b></p>
+      <p>Roll No: <b id="showRoll"></b></p>
+      <p>Route: <b id="showRoute"></b></p>
+ 
+      <label>Type of Request</label>
+      <select id="requestType">
+        <option value="New">New Pass</option>
+        <option value="Renewal">Renew Old Pass</option>
+      </select>
+ 
+      <button class="action" onclick="sendRequest()">Submit Request</button>
+      <div id="requestMsg" class="msg good">Your request has been sent to admin!</div>
+    </div>
+  </div>
+ 
+  <div id="mypass" class="section">
+    <h2>My Pass</h2>
+    <div id="myPassArea">
+      <p>You have not requested a pass yet.</p>
+    </div>
+  </div>
+ 
+  <div id="admin" class="section">
+    <h2>Admin Panel</h2>
+    <p>Here the admin can see all requests and approve/reject them.</p>
+    <table id="adminTable">
+      <tr>
+        <th>Pass ID</th>
+        <th>Name</th>
+        <th>Route</th>
+        <th>Fee</th>
+        <th>Status</th>
+        <th>Expiry</th>
+        <th>Action</th>
+      </tr>
+    </table>
+  </div>
+ 
+  <div id="validate" class="section">
+    <h2>Validate a Pass</h2>
+    <label>Enter Pass ID</label>
+    <input type="text" id="checkId" placeholder="e.g. PASS1001">
+    <button class="action" onclick="checkPass()">Check Pass</button>
+    <div id="validateResult" style="margin-top:15px;"></div>
+  </div>
+ 
+  <footer>Made with HTML, CSS and JavaScript &mdash; College Mini Project</footer>
+ 
+<script>
+ 
+  var myProfile = null;          // stores current student's profile
+  var myPassId = null;           // stores which pass belongs to "me"
+  var passCounter = 1001;        // used to generate pass IDs
+ 
+  var allRequests = [
+    {id: "PASS1001", name: "Rahul Mehta", roll: "1201", route: "Route 2", fee: 350, status: "Approved", expiry: "2026-11-01"},
+    {id: "PASS1002", name: "Priya Nair", roll: "1202", route: "Route 3", fee: 800, status: "Pending", expiry: ""},
+    {id: "PASS1003", name: "Farhan Ali", roll: "1203", route: "Route 1", fee: 500, status: "Rejected", expiry: ""}
+  ];
+ 
+  var routeFees = {
+    "Route 1": 500,
+    "Route 2": 350,
+    "Route 3": 800
+  };
+ 
+  function showSection(sectionId) {
+    // hide all sections
+    var sections = document.getElementsByClassName("section");
+    for (var i = 0; i < sections.length; i++) {
+      sections[i].classList.remove("active");
+    }
+    // show the one we clicked
+    document.getElementById(sectionId).classList.add("active");
+ 
+    // update button highlight
+    var buttons = document.getElementsByClassName("tab-btn");
+    for (var i = 0; i < buttons.length; i++) {
+      buttons[i].classList.remove("active");
+    }
+    event.target.classList.add("active");
+ 
+    // refresh some pages when opened
+    if (sectionId === "admin") { loadAdminTable(); }
+    if (sectionId === "mypass") { loadMyPass(); }
+    if (sectionId === "request") { loadRequestForm(); }
+  }
+ 
+  function saveProfile() {
+    var name = document.getElementById("studentName").value;
+    var roll = document.getElementById("studentRoll").value;
+    var email = document.getElementById("studentEmail").value;
+    var route = document.getElementById("studentRoute").value;
+ 
+    if (name === "" || roll === "") {
+      alert("Please enter your name and roll number!");
+      return;
+    }
+ 
+    myProfile = { name: name, roll: roll, email: email, route: route };
+ 
+    var msg = document.getElementById("profileMsg");
+    msg.classList.add("show");
+    setTimeout(function () { msg.classList.remove("show"); }, 2000);
+  }
+ 
+  function loadRequestForm() {
+    if (myProfile === null) {
+      document.getElementById("noProfileMsg").classList.add("show");
+      document.getElementById("requestForm").style.display = "none";
+    } else {
+      document.getElementById("noProfileMsg").classList.remove("show");
+      document.getElementById("requestForm").style.display = "block";
+      document.getElementById("showName").innerText = myProfile.name;
+      document.getElementById("showRoll").innerText = myProfile.roll;
+      document.getElementById("showRoute").innerText = myProfile.route;
+    }
+  }
+ 
+  function sendRequest() {
+    var type = document.getElementById("requestType").value;
+    var fee = routeFees[myProfile.route];
+ 
+    var newId = "PASS" + passCounter;
+    passCounter = passCounter + 1;
+ 
+    var newRequest = {
+      id: newId,
+      name: myProfile.name,
+      roll: myProfile.roll,
+      route: myProfile.route,
+      fee: fee,
+      status: "Pending",
+      expiry: ""
+    };
+ 
+    allRequests.push(newRequest);
+    myPassId = newId;
+ 
+    var msg = document.getElementById("requestMsg");
+    msg.classList.add("show");
+    setTimeout(function () { msg.classList.remove("show"); }, 2500);
+  }
+ 
+  function loadMyPass() {
+    var area = document.getElementById("myPassArea");
+ 
+    if (myPassId === null) {
+      area.innerHTML = "<p>You have not requested a pass yet. Go to 'Request Pass' tab.</p>";
+      return;
+    }
+ 
+    // find my request in the list
+    var myReq = null;
+    for (var i = 0; i < allRequests.length; i++) {
+      if (allRequests[i].id === myPassId) {
+        myReq = allRequests[i];
+      }
+    }
+ 
+    if (myReq.status === "Pending") {
+      area.innerHTML = "<p>Status: <span class='tag pending'>Pending</span></p>" +
+        "<p>Your request for " + myReq.route + " is waiting for admin approval.</p>";
+    }
+    else if (myReq.status === "Rejected") {
+      area.innerHTML = "<p>Status: <span class='tag rejected'>Rejected</span></p>" +
+        "<p>Sorry, your request was rejected. Please try again.</p>";
+    }
+    else {
+      // Approved - show the pass card
+      area.innerHTML =
+        "<div class='pass-card'>" +
+          "<h3>" + myReq.name + "</h3>" +
+          "<p>Roll No: " + myReq.roll + " | Route: " + myReq.route + "</p>" +
+          "<div class='fake-qr'></div>" +
+          "<div class='pass-id'>" + myReq.id + "</div>" +
+          "<p>Fee Paid: Rs. " + myReq.fee + "</p>" +
+          "<p>Valid Until: <b>" + myReq.expiry + "</b></p>" +
+          "<p><span class='tag approved'>Active</span></p>" +
+        "</div>" +
+        "<p style='font-size:12px;color:#777;'>Show this Pass ID at the checkpoint for validation.</p>";
+    }
+  }
+ 
+  function loadAdminTable() {
+    var table = document.getElementById("adminTable");
+ 
+    // reset table (keep header row only)
+    table.innerHTML =
+      "<tr><th>Pass ID</th><th>Name</th><th>Route</th><th>Fee</th><th>Status</th><th>Expiry</th><th>Action</th></tr>";
+ 
+    for (var i = 0; i < allRequests.length; i++) {
+      var r = allRequests[i];
+ 
+      var statusTag = "<span class='tag " + r.status.toLowerCase() + "'>" + r.status + "</span>";
+ 
+      var actionButtons = "-";
+      if (r.status === "Pending") {
+        actionButtons =
+          "<button class='action small-btn' onclick=\"approveRequest('" + r.id + "')\">Approve</button>" +
+          "<button class='action small-btn reject-btn' onclick=\"rejectRequest('" + r.id + "')\">Reject</button>";
+      }
+ 
+      var row = "<tr>" +
+        "<td>" + r.id + "</td>" +
+        "<td>" + r.name + "</td>" +
+        "<td>" + r.route + "</td>" +
+        "<td>Rs. " + r.fee + "</td>" +
+        "<td>" + statusTag + "</td>" +
+        "<td>" + (r.expiry === "" ? "-" : r.expiry) + "</td>" +
+        "<td>" + actionButtons + "</td>" +
+      "</tr>";
+ 
+      table.innerHTML += row;
+    }
+  }
+ 
+  function approveRequest(id) {
+    for (var i = 0; i < allRequests.length; i++) {
+      if (allRequests[i].id === id) {
+        allRequests[i].status = "Approved";
+        allRequests[i].expiry = getExpiryDate();
+      }
+    }
+    loadAdminTable();
+  }
+ 
+  function rejectRequest(id) {
+    for (var i = 0; i < allRequests.length; i++) {
+      if (allRequests[i].id === id) {
+        allRequests[i].status = "Rejected";
+      }
+    }
+    loadAdminTable();
+  }
+ 
+
+  function getExpiryDate() {
+    var today = new Date();
+    today.setDate(today.getDate() + 90);
+    var yyyy = today.getFullYear();
+    var mm = String(today.getMonth() + 1).padStart(2, "0");
+    var dd = String(today.getDate()).padStart(2, "0");
+    return yyyy + "-" + mm + "-" + dd;
+  }
+ 
+  function checkPass() {
+    var enteredId = document.getElementById("checkId").value.trim();
+    var result = document.getElementById("validateResult");
+    var found = null;
+ 
+    for (var i = 0; i < allRequests.length; i++) {
+      if (allRequests[i].id.toLowerCase() === enteredId.toLowerCase()) {
+        found = allRequests[i];
+      }
+    }
+ 
+    if (found === null || found.status !== "Approved") {
+      result.innerHTML = "<div class='msg bad show'>❌ Invalid Pass ID. This pass does not exist or is not approved.</div>";
+      return;
+    }
+ 
+   
+    var todayStr = new Date().toISOString().slice(0, 10);
+    if (found.expiry < todayStr) {
+      result.innerHTML = "<div class='msg bad show'>⚠️ This pass has expired on " + found.expiry + ".</div>";
+      return;
+    }
+ 
+    result.innerHTML =
+      "<div class='msg good show'>" +
+      "✅ Valid Pass!<br>" +
+      "Name: " + found.name + "<br>" +
+      "Route: " + found.route + "<br>" +
+      "Valid Until: " + found.expiry +
+      "</div>";
+  }
+</script>
+ 
+</body>
+</html>
